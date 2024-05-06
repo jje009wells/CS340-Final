@@ -22,7 +22,8 @@ result = os.urandom(9)
 
 #generate input
 b9 = bytearray(random.getrandbits(8) for _ in range(9))
-print(b9)
+#print(b9)
+print(3)
 #do the bytes to words
 
 #check correctness of the bytes to words return

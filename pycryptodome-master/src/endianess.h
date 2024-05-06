@@ -33,6 +33,8 @@
 #define ENDIANESS_H
 
 #include "common.h"
+#include <stdint.h>
+#include <assert.h>
 
 static inline void u32to8_little(uint8_t *p, const uint32_t *w)
 {

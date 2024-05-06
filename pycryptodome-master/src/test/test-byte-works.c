@@ -1,6 +1,7 @@
 #include "../endianess.h"
-#include <stdint.h>
 #include <assert.h>
+#include <stdint.h>
+
 
 void test_little_32(void)
 {
@@ -155,6 +156,8 @@ void test_bytes_to_words(void)
     assert(w2_0[0] == 0x0203040506070809);
     assert(w2_0[1] == 0x01);
     assert(res == 0);
+
+    printf("no assets failed here\n");
 }
 
 void test_words_to_bytes(void)
@@ -202,10 +205,55 @@ void test_words_to_bytes(void)
     for (i=0; i<sizeof b17; i++) {
         assert(b17[i] == 0);
     }
-    printf("None of my asserts in test-endianess w t b failed?\n");
 }
 
-int main(void)
+void fuzz_test_bytes_to_words(uint8_t in_arr[9])
+{
+    int res;
+    uint8_t b2[2] = { 9, 3 };
+    uint8_t b9[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    uint64_t w2[2] = { 6, 4 };
+    uint64_t w2_0[2];
+    uint8_t b17[17];
+
+    res = bytes_to_words(NULL, 10, b2, 2);
+    assert(res == ERR_NULL);
+    res = bytes_to_words(w2, 10, NULL, 2);
+    assert(res == ERR_NULL);
+    res = bytes_to_words(w2, 2, b2, 0);
+    assert(res == ERR_NOT_ENOUGH_DATA);
+    res = bytes_to_words(w2, 0, b2, 2);
+    assert(res == ERR_NOT_ENOUGH_DATA);
+   
+    memset(b17, 0, 17);
+    b17[0] = 1;
+    res = bytes_to_words(w2, 2, b17, 17);
+    assert(res == ERR_MAX_DATA);
+
+    b17[0] = 0;
+    res = bytes_to_words(w2, 2, b17, 17);
+    assert(res == 0);
+    assert(w2[0] == 0 && w2[1] == 0);
+
+    res = bytes_to_words(w2_0, 2, b2, 2);
+    assert(w2_0[0] == 0x0903);
+    assert(w2_0[1] == 0);
+    assert(res == 0);
+    
+    res = bytes_to_words(w2_0, 2, b9, 9);
+    assert(w2_0[0] == 0x0203040506070809);
+    assert(w2_0[1] == 0x01);
+    assert(res == 0);
+
+    res = bytes_to_words(w2_0, 2, in_arr, 9);
+    assert(w2_0[0] == 0x0203040506070809);
+    assert(w2_0[1] == 0x01);
+    assert(res == 0);
+
+    printf("no asserts failed here in the fuzz\n");
+}
+
+int main(int argc, char* argv[])
 {
     //test_little_32();
     //test_big_32();
@@ -213,5 +261,18 @@ int main(void)
     //test_big_64();
     test_bytes_to_words();
     test_words_to_bytes();
+
+    // uint8_t input1;
+    // scanf("%x",&input1);
+    // printf("Value is %x\n",input1);
+
+    int input1;
+    scanf("%d",&input1);
+    printf("Value is %d\n",input1);
+    
+
+    uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    fuzz_test_bytes_to_words(input1);
+
     return 0;
 }

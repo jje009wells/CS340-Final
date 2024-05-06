@@ -21,6 +21,7 @@ print(result)
 print(b9)
 
 #generate input
+b9 = bytearray(random.getrandbits(8) for _ in range(9))
 
 #do the bytes to words
 

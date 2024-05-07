@@ -4,13 +4,14 @@ import os, random, subprocess
 #call python byte array func, should be the same as however they generated b9
 
 #Return an array of 4 bytes:
-x = bytearray(4)
+#x = bytearray(4)
 
 #array of 9 bytes?
 y = bytearray(9)
+#print(y)
 
 #this is a string, can turn into array?
-result = os.urandom(9)  
+#result = os.urandom(9)  
 
 #not crypto secure but works for now
 #b9 = bytearray(random.getrandbits(8) for _ in range(9))
@@ -21,9 +22,20 @@ result = os.urandom(9)
 # print(b9)
 
 #generate input
-b9 = bytearray(random.getrandbits(8) for _ in range(9))
+#b9 = bytearray(random.getrandbits(8) for _ in range(9))
+
 #print(b9)
-print(3)
+#print(3)
 #do the bytes to words
 
 #check correctness of the bytes to words return
+
+
+def main():
+    b9 = bytearray(9)
+    #b9 = bytearray(random.getrandbits(8) for _ in range(9))
+    print(b9)
+    #return b9
+
+if __name__ == "__main__":
+    main()

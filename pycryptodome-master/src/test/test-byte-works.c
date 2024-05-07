@@ -212,9 +212,14 @@ void fuzz_test_bytes_to_words(uint8_t in_arr[9])
     int res;
     uint8_t b2[2] = { 9, 3 };
     uint8_t b9[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    printf("b9 is, %s", b9);
     uint64_t w2[2] = { 6, 4 };
     uint64_t w2_0[2];
     uint8_t b17[17];
+
+    
+    
+    printf("Getting past decls\n");
 
     res = bytes_to_words(NULL, 10, b2, 2);
     assert(res == ERR_NULL);
@@ -245,12 +250,15 @@ void fuzz_test_bytes_to_words(uint8_t in_arr[9])
     assert(w2_0[1] == 0x01);
     assert(res == 0);
 
+    printf("Getting past the asserts before my input one\n");
+    printf("in_arr, %s", in_arr);
+
     res = bytes_to_words(w2_0, 2, in_arr, 9);
     assert(w2_0[0] == 0x0203040506070809);
     assert(w2_0[1] == 0x01);
     assert(res == 0);
 
-    printf("no asserts failed here in the fuzz\n");
+    printf("no asserts failed here in the fuzz vers\n");
 }
 
 int main(int argc, char* argv[])
@@ -259,20 +267,46 @@ int main(int argc, char* argv[])
     //test_big_32();
     //test_little_64();
     //test_big_64();
-    test_bytes_to_words();
-    test_words_to_bytes();
+    //test_bytes_to_words();
+    //test_words_to_bytes();
 
     // uint8_t input1;
     // scanf("%x",&input1);
     // printf("Value is %x\n",input1);
 
     int input1;
-    scanf("%d",&input1);
-    printf("Value is %d\n",input1);
-    
+    //scanf("%d",&input1);
+    //printf("Value is %d\n",input1);
+    printf("argc: %d \n", argc);
+    printf("argv size: %d \n", sizeof(argv));
 
+
+    for(int i = 0; i < sizeof(argv); i++)
+    {
+        printf("ARg %d is %s",i,argv[i]);
+        printf("\n");
+    }
+
+    uint8_t test[9];
+    // for(int i = 0; i < sizeof(argv[1]); i++)
+    // {
+    //     test[i] = (uint8_t)(argv[1][i]);
+    // }
+    int len = strlen(argv[1]);
+    
+    printf("Length %d", len);
+    
+    // for(int i = 0; argv[1][i]; i++)
+    // {
+    //     printf("TEST");
+    //     printf("Elt %d of input %s \n",i,argv[1][i]);
+    // }
+
+    printf("test input conv to array: %s\n", test);
+    
+    printf("ARg 1 is %x",argv[1]);
     uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    fuzz_test_bytes_to_words(input1);
+    fuzz_test_bytes_to_words(test);
 
     return 0;
 }

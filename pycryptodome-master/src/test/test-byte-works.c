@@ -1,6 +1,8 @@
 #include "../endianess.h"
 #include <assert.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 
 void test_little_32(void)
@@ -216,8 +218,6 @@ void fuzz_test_bytes_to_words(uint8_t in_arr[9])
     uint64_t w2[2] = { 6, 4 };
     uint64_t w2_0[2];
     uint8_t b17[17];
-
-    
     
     printf("Getting past decls\n");
 
@@ -288,22 +288,38 @@ int main(int argc, char* argv[])
     }
 
     uint8_t test[9];
-    // for(int i = 0; i < sizeof(argv[1]); i++)
-    // {
-    //     test[i] = (uint8_t)(argv[1][i]);
-    // }
+    for(int i = 0; i < sizeof(argv[1]); i++)
+    {
+        //test[i] = (uint8_t)(argv[1][i]);
+        int n = (int)(argv[1][i])+0;
+        //printf(type(argv[1][i]));
+        printf("Num is %d\n", n);
+        test[i] = (uint8_t)n;
+    }
     int len = strlen(argv[1]);
     
     printf("Length %d\n", len);
     int j = 0;
     //for( char* p = argv[1]; *p!=0; p++ ) printf("%x\n", *p);
-    while( *argv[1]!=0)
-    {
-        //printf("j is %d\n", j); 
-        printf("%c\n", *argv[1]);
-        argv[1]++;
-        //j++;
-    } 
+
+
+
+    // while( *argv[1]!=0)
+    // {
+    //     //printf("j is %d\n", j);
+    //     char c = *argv[1];
+    //     printf("c is %c\n", c);
+    //     char* x = 'x';
+    //     printf("x is %c\n", x); 
+    //     if(c == x)
+    //     {
+    //         //printf("%x",argv[1]);
+    //         printf("TESTTTTTTTTTTTTTTT");
+    //     }
+    //     printf("%c\n", *argv[1]);
+    //     argv[1]++;
+    //     //j++;
+    // } 
 
     // for(int i = 0; i < len; i++)
     // {
@@ -311,10 +327,13 @@ int main(int argc, char* argv[])
     //     printf("Elt %d of input %s \n",i, *(argv[1]+i));
     // }
 
-    printf("test input conv to array: %s\n", test);
+    for(int i = 0; i < sizeof(test); i++)
+    {
+        printf("Test i is: %d\n", test[i]);
+    }
     
     //printf("ARg 1 is %x",argv[1]);
-    uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    //uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     fuzz_test_bytes_to_words(test);
 
     return 0;

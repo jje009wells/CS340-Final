@@ -294,17 +294,26 @@ int main(int argc, char* argv[])
     // }
     int len = strlen(argv[1]);
     
-    printf("Length %d", len);
-    
-    // for(int i = 0; argv[1][i]; i++)
+    printf("Length %d\n", len);
+    int j = 0;
+    //for( char* p = argv[1]; *p!=0; p++ ) printf("%x\n", *p);
+    while( *argv[1]!=0)
+    {
+        //printf("j is %d\n", j); 
+        printf("%c\n", *argv[1]);
+        argv[1]++;
+        //j++;
+    } 
+
+    // for(int i = 0; i < len; i++)
     // {
     //     printf("TEST");
-    //     printf("Elt %d of input %s \n",i,argv[1][i]);
+    //     printf("Elt %d of input %s \n",i, *(argv[1]+i));
     // }
 
     printf("test input conv to array: %s\n", test);
     
-    printf("ARg 1 is %x",argv[1]);
+    //printf("ARg 1 is %x",argv[1]);
     uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     fuzz_test_bytes_to_words(test);
 

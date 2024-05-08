@@ -55,6 +55,7 @@ By following these steps, you can locally implement the fuzzer to test the bytes
 
 - C's strict type system limits the ability to ensure entirely random data.
 - Consideration of `word_to_byte` vs. `byte_to_word` conversions.
+- Not fully automated because command line code tests bytes_to_words for a single randomized input, but constrained by time and cost of running very long files in CS server
 
 ## Challenges
 

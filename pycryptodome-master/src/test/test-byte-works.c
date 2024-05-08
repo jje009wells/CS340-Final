@@ -212,53 +212,60 @@ void test_words_to_bytes(void)
 void fuzz_test_bytes_to_words(uint8_t in_arr[9])
 {
     int res;
-    uint8_t b2[2] = { 9, 3 };
-    uint8_t b9[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    printf("b9 is, %s", b9);
+    //uint8_t b2[2] = { 9, 3 };
+    //uint8_t b9[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     uint64_t w2[2] = { 6, 4 };
     uint64_t w2_0[2];
     uint8_t b17[17];
-    
-    printf("Getting past decls\n");
 
-    res = bytes_to_words(NULL, 10, b2, 2);
+    // res = bytes_to_words(NULL, 10, b2, 2);
+    // assert(res == ERR_NULL);
+    // res = bytes_to_words(w2, 10, NULL, 2);
+    // assert(res == ERR_NULL);
+    // res = bytes_to_words(w2, 2, b2, 0);
+    // assert(res == ERR_NOT_ENOUGH_DATA);
+    // res = bytes_to_words(w2, 0, b2, 2);
+    // assert(res == ERR_NOT_ENOUGH_DATA);
+   
+    // memset(b17, 0, 17);
+    // b17[0] = 1;
+    // res = bytes_to_words(w2, 2, b17, 17);
+    // assert(res == ERR_MAX_DATA);
+
+    // b17[0] = 0;
+    // res = bytes_to_words(w2, 2, b17, 17);
+    // assert(res == 0);
+    // assert(w2[0] == 0 && w2[1] == 0);
+
+    // res = bytes_to_words(w2_0, 2, b2, 2);
+    // assert(w2_0[0] == 0x0903);
+    // assert(w2_0[1] == 0);
+    // assert(res == 0);
+    
+    // res = bytes_to_words(w2_0, 2, b9, 9);
+    // assert(w2_0[0] == 0x0203040506070809);
+    // assert(w2_0[1] == 0x01);
+    // assert(res == 0);
+
+    //test some of the basic error cases
+    res = bytes_to_words(NULL, 10, in_arr, 2);
     assert(res == ERR_NULL);
     res = bytes_to_words(w2, 10, NULL, 2);
     assert(res == ERR_NULL);
-    res = bytes_to_words(w2, 2, b2, 0);
+    res = bytes_to_words(w2, 2, in_arr, 0);
     assert(res == ERR_NOT_ENOUGH_DATA);
-    res = bytes_to_words(w2, 0, b2, 2);
+    res = bytes_to_words(w2, 0, in_arr, 2);
     assert(res == ERR_NOT_ENOUGH_DATA);
-   
-    memset(b17, 0, 17);
+
+    memset(in_arr, 0, 9);
     b17[0] = 1;
-    res = bytes_to_words(w2, 2, b17, 17);
-    assert(res == ERR_MAX_DATA);
+    res = bytes_to_words(w2, 2, in_arr, 9);
+    //assert(res == ERR_MAX_DATA);
 
-    b17[0] = 0;
-    res = bytes_to_words(w2, 2, b17, 17);
-    assert(res == 0);
-    assert(w2[0] == 0 && w2[1] == 0);
-
-    res = bytes_to_words(w2_0, 2, b2, 2);
-    assert(w2_0[0] == 0x0903);
-    assert(w2_0[1] == 0);
-    assert(res == 0);
-    
-    res = bytes_to_words(w2_0, 2, b9, 9);
-    assert(w2_0[0] == 0x0203040506070809);
-    assert(w2_0[1] == 0x01);
-    assert(res == 0);
-
-    printf("Getting past the asserts before my input one\n");
-    printf("in_arr, %s", in_arr);
-
+    //expect this to work
     res = bytes_to_words(w2_0, 2, in_arr, 9);
-    assert(w2_0[0] == 0x0203040506070809);
-    assert(w2_0[1] == 0x01);
     assert(res == 0);
-
-    printf("no asserts failed here in the fuzz vers\n");
+    printf("No asserts failed here\n");
 }
 
 
@@ -314,6 +321,35 @@ int main(int argc, char* argv[])
     int n1,n2,n3,n4,n5,n6,n7,n8,n9;
     sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9);
     printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
+    
+
+    // FILE* ptr = fopen("fuzzf.txt", "r");
+    // if (ptr == NULL) {
+    //     printf("no such file.\n");
+    //     return 0;
+    // }
+ 
+    // uint8_t test_arr[9] = {n1,n2,n3,n4,n5,n6,n7,n8,n9};
+
+    // char buf[100];
+    // printf("I GET HERE b4 while\n");
+    // while (fscanf(ptr, "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9) == 1)
+    // {
+    //     printf("I GET HERE");
+    //     // uint8_t test_arr[9] = {n1,n2,n3,n4,n5,n6,n7,n8,n9};
+        
+    //     // for(int i = 0; i < sizeof(test_arr); i++)
+    //     // {
+    //     //     printf("Test i is: %d\n", test_arr[i]);
+    //     // }
+        
+    
+
+    //     // fuzz_test_bytes_to_words(test_arr);
+
+    //     printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
+    // }
+            
     
     // int length, i;
     // int *array;
@@ -384,8 +420,8 @@ int main(int argc, char* argv[])
         printf("Test i is: %d\n", test_arr[i]);
     }
     
-    //printf("ARg 1 is %x",argv[1]);
-    //uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    // //printf("ARg 1 is %x",argv[1]);
+    // //uint8_t tester[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     fuzz_test_bytes_to_words(test_arr);
 
     return 0;

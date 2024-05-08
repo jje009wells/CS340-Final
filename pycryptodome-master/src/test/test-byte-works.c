@@ -319,8 +319,8 @@ int main(int argc, char* argv[])
     //     i++;            // increment our count of the number of values found
     // }
     int n1,n2,n3,n4,n5,n6,n7,n8,n9;
-    sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9);
-    printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
+    while (sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9) ==1)
+        printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
     
 
     // FILE* ptr = fopen("fuzzf.txt", "r");

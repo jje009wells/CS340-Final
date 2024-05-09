@@ -217,6 +217,28 @@ void fuzz_test_bytes_to_words(uint8_t in_arr[9])
     uint64_t w2[2] = { 6, 4 };
     uint64_t w2_0[2];
     uint8_t b17[17];
+    uint8_t orig[9];
+   // printf("size %d", sizeof(in_arr));
+
+    for(int i = 0; i <= sizeof(in_arr); i++)
+    {
+        printf("in_arr i is: %hhx\n", in_arr[i]);
+        orig[i] = in_arr[i];
+    }
+
+    FILE* fp = fopen("output.txt", "a");
+    if (fp == NULL) {
+        printf("no such file.\n");
+        return 0;
+    }
+    fprintf(fp, "On input: ");
+    for(int i = 0; i < sizeof(orig); i++)
+    {
+        printf("I get here!");
+        fprintf(fp, "0x%02hhx, ", orig[i]);
+    }
+
+    fprintf(fp, " -- ");
 
     // res = bytes_to_words(NULL, 10, b2, 2);
     // assert(res == ERR_NULL);
@@ -249,23 +271,64 @@ void fuzz_test_bytes_to_words(uint8_t in_arr[9])
 
     //test some of the basic error cases
     res = bytes_to_words(NULL, 10, in_arr, 2);
+    if(res != ERR_NULL)
+    {
+        fprintf(fp, "Null error not behaving as expected\n");
+        fclose(fp); //close the file when finished
+    }
     assert(res == ERR_NULL);
     res = bytes_to_words(w2, 10, NULL, 2);
+    if(res != ERR_NULL)
+    {
+        fprintf(fp, "Null error not behaving as expected\n");
+        fclose(fp); //close the file when finished
+    }
     assert(res == ERR_NULL);
     res = bytes_to_words(w2, 2, in_arr, 0);
+    printf("res %s", res);
+    if(res != ERR_NOT_ENOUGH_DATA)
+    {
+        fprintf(fp, "Not enough data error not behaving as expected\n");
+        fclose(fp); //close the file when finished
+    }
     assert(res == ERR_NOT_ENOUGH_DATA);
     res = bytes_to_words(w2, 0, in_arr, 2);
+    if(res != ERR_NOT_ENOUGH_DATA)
+    {
+        fprintf(fp, "Not enough data error not behaving as expected\n");
+        fclose(fp); //close the file when finished
+    }
     assert(res == ERR_NOT_ENOUGH_DATA);
 
-    memset(in_arr, 0, 9);
-    b17[0] = 1;
-    res = bytes_to_words(w2, 2, in_arr, 9);
-    //assert(res == ERR_MAX_DATA);
+    res = bytes_to_words(w2, 1, in_arr, 9);
+    if(res != ERR_MAX_DATA)
+    {
+        fprintf(fp, "Max data error not behaving as expected\n");
+        fclose(fp); //close the file when finished
+    }
+    assert(res == ERR_MAX_DATA);
 
-    //expect this to work
+    //general test that 0 returns when bad input not intentionally put in
     res = bytes_to_words(w2_0, 2, in_arr, 9);
+    if(res != 0)
+    {
+        fprintf(fp, "Failed to return 0 when 0 expected\n");
+        fprintf(fp, "\n");
+        fclose(fp); //close the file when finished
+    }
     assert(res == 0);
-    printf("No asserts failed here\n");
+
+
+    printf("No asserts failed here\n"); //for ease of testing
+    fprintf(fp, "No unexpected behavior found."); //all 
+
+    for(int i = 0; i < sizeof(orig); i++)
+    {
+        printf("orig i is: %02hhx\n", orig[i]);
+    }
+
+    fprintf(fp, "\n");
+    fclose(fp); //close the file when finished
 }
 
 
@@ -319,8 +382,12 @@ int main(int argc, char* argv[])
     //     i++;            // increment our count of the number of values found
     // }
     int n1,n2,n3,n4,n5,n6,n7,n8,n9;
-    while (sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9) ==1)
-        printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
+    printf("%d",sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9));
+    // while (sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d] %*s", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9) != EOF)
+    // {
+    //     printf("I get here");
+    //     printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
+    // }
     
 
     // FILE* ptr = fopen("fuzzf.txt", "r");
@@ -329,11 +396,11 @@ int main(int argc, char* argv[])
     //     return 0;
     // }
  
-    // uint8_t test_arr[9] = {n1,n2,n3,n4,n5,n6,n7,n8,n9};
+    // // uint8_t test_arr[9] = {n1,n2,n3,n4,n5,n6,n7,n8,n9};
 
     // char buf[100];
     // printf("I GET HERE b4 while\n");
-    // while (fscanf(ptr, "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9) == 1)
+    // while (fscanf(ptr, "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9) == 1)
     // {
     //     printf("I GET HERE");
     //     // uint8_t test_arr[9] = {n1,n2,n3,n4,n5,n6,n7,n8,n9};
@@ -345,10 +412,10 @@ int main(int argc, char* argv[])
         
     
 
-    //     // fuzz_test_bytes_to_words(test_arr);
+    // //     // fuzz_test_bytes_to_words(test_arr);
 
-    //     printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
-    // }
+    // //     printf("[%d, %d, %d, %d, %d, %d, %d, %d, %d]", n1,n2,n3,n4,n5,n6,n7,n8,n9);
+    //  }
             
     
     // int length, i;
@@ -417,7 +484,7 @@ int main(int argc, char* argv[])
 
     for(int i = 0; i < sizeof(test_arr); i++)
     {
-        printf("Test i is: %d\n", test_arr[i]);
+        printf("Test i is: %hhx\n", test_arr[i]);
     }
     
     // //printf("ARg 1 is %x",argv[1]);

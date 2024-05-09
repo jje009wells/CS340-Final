@@ -285,7 +285,7 @@ void fuzz_test_bytes_to_words(uint8_t in_arr[9])
     }
     assert(res == ERR_NULL);
     res = bytes_to_words(w2, 2, in_arr, 0);
-    printf("res %s", res);
+    //printf("res %s", res);
     if(res != ERR_NOT_ENOUGH_DATA)
     {
         fprintf(fp, "Not enough data error not behaving as expected\n");
@@ -382,7 +382,8 @@ int main(int argc, char* argv[])
     //     i++;            // increment our count of the number of values found
     // }
     int n1,n2,n3,n4,n5,n6,n7,n8,n9;
-    printf("%d",sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9));
+    //printf("%d",sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9));
+    sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d]", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9);
     // while (sscanf( argv[1], "[%d, %d, %d, %d, %d, %d, %d, %d, %d] %*s", &n1,&n2,&n3,&n4,&n5,&n6,&n7,&n8,&n9) != EOF)
     // {
     //     printf("I get here");

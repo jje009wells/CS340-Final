@@ -1,3 +1,7 @@
 {
-    "C_Cpp.enhancedColorization": "enabled"
+    "C_Cpp.enhancedColorization": "enabled",
+    "files.associations": {
+        "string_view": "c",
+        "string.h": "c"
+    }
 }
